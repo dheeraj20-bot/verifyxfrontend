@@ -37,9 +37,10 @@ const chartConfig = {
 
 interface Document {
   id: string;
+  score: string;
+  imageUrl:string;
+  createdAt: string;
   status: string;
-  type: string;
-  issuerCountry: string;
 }
 
 interface DocumentDetailsProps {
@@ -52,19 +53,18 @@ export default function DocumentDetails({
   onBack,
 }: DocumentDetailsProps) {
 
-  const googleViewerUrl = "https://drive.google.com/viewerng/viewer?embedded=true&url=https://www.drishtiias.com/images/pdf/NCERT-Class-10-History.pdf";
 
   const getProgressPercentage = (status: string) => {
     switch (status) {
-      case "PASSED":
+      case "NORMAL":
         return 100;
-      case "PENDING":
-        return 70;
+      case "WARNING":
+        return 0;
       default:
         return 0;
     }
   };
-  const progress = document ? getProgressPercentage(document.status) : 0;
+  const progress = document ? getProgressPercentage(document.score) : 0;
 
   const chartData = [
     { name: "progress", value: progress, fill: "var(--color-progress)" },
@@ -89,25 +89,9 @@ export default function DocumentDetails({
       <CardContent className="space-y-4">
         <div className="flex gap-2">
           <div className=" w-full  p-4 rounded-md">
-            <h4 className=" text-3xl font-bold">
-              {" "}
-              {`${progress}%`}{" "}
-              <span className="text-yellow-400">-Neutral 😐</span>{" "}
-            </h4>
-            <div className="  px-2 mt-5 py-3 rounded-lg">
-              <div className="flex mb-5 justify-between">
-                <p>Verified</p>
-                <p>{`${progress}%`}</p>
-              </div>
-              <div className="flex justify-between">
-                <p>Risks</p>
-                <p>{`${100- progress}%`}</p>
-              </div>
-            </div>
-            <p className="mt-5 w-full">
-              This score represents the overall favorability of the document
-              based on the identified risks and opportunities.
-            </p>
+           
+           <img src={document.imageUrl} width={1000}  height={1000} alt="" />
+           
           </div>
 
           <div className="w-full">
@@ -162,37 +146,9 @@ export default function DocumentDetails({
           </div>
         </div>
 
-        <Separator />
 
-        <div>
-          <h3 className="font-semibold mb-2">Classification Details</h3>
-          <div className="bg-muted p-4 rounded-md">
-            <p>Document Type: {document.type}</p>
-            <p>Issuer: {document.issuerCountry}</p>
-          </div>
-        </div>
-        <Separator />
-        <div>
-          <h3 className="font-semibold mb-2">Document Preview</h3>
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              "Resolution",
-              "Blur Level",
-              "Quality Status",
-              "Document Type",
-              "Issuer",
-              "Country of Origin",
-            ].map((item) => (
-              <div
-                key={item}
-                className="flex items-center justify-between bg-muted p-2 rounded-md"
-              >
-                <span>{item}</span>
-                <Check className="h-4 w-4 text-green-500" />
-              </div>
-            ))}
-          </div>
-        </div>
+        
+     
         <Separator />
 
         <div>
@@ -206,13 +162,7 @@ export default function DocumentDetails({
           </div>
         </div>
          
-        <iframe
-      src={googleViewerUrl}
-      width="100%"
-      height="600"
-      style={{ border: 'none' }}
-      allowFullScreen
-    />
+      
         
       </CardContent>
       <CardFooter className="justify-end space-x-2">

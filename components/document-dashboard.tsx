@@ -12,8 +12,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import DocumentDetails from "@/components/document-details";
 import axios from "axios";
 
-
-
 import { Button } from "./ui/button";
 
 // Mock data for documents
@@ -30,7 +28,7 @@ export default function DocumentDashboard() {
   const [documents, setDocuments] = useState<DocumentListItem[]>([]);
   // console.log(documents);
 
-  const [selectedDoc, setSelectedDoc] = useState<Document | null>(null);
+  const [selectedDoc, setSelectedDoc] = useState<DocumentListItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -72,8 +70,8 @@ export default function DocumentDashboard() {
           <ScrollArea className="h-[calc(100vh-200px)] w-full">
             <div className="grid grid-cols-2 gap-4 p-4">
               {documents.map((doc, index) => (
-                <Card key={index} className="overflow-hidden">
-                  <CardContent className="p-4">
+                <div key={index} className="overflow-hidden">
+                  <div className="p-4">
                     <div className="flex items-center gap-2  mb-2">
                       <div className="bg-primary/10 py-2 px-2">
                         <img
@@ -83,16 +81,26 @@ export default function DocumentDashboard() {
                         />
                       </div>
 
-                      <span className="text-sm w-full">{doc.id}</span>
+                      <div className="flex flex-col  space-y-10 ">
+
+                        <div>
+                          <p className="text-sm">{doc.id.substring(1,10)}....</p>
+                          <p className="text-sm">{doc.createdAt}</p>
+                        </div>
+
+                        <div className="flex gap-2 items-center justify-between ">
+                          <p className={`${doc.score==="WARNING"?" text-red-400":doc.score==="NORMAL"?" text-green-400":" text-slate-700"} text-sm `}>{doc.score}</p>
+                          <Button 
+                          onClick={() => setSelectedDoc(doc)}
+                        
+                          className=" w-full rounded-[0.60rem] bg-primary text-white">
+                            Review
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                  </CardContent>
-                  <CardFooter className="bg-gray-50 p-2 ml-24 flex justify-between ">
-                    <p>{doc.score}</p>
-                    <Button className=" rounded-lg bg-primary text-white">
-                      Review
-                    </Button>
-                  </CardFooter>
-                </Card>
+                  </div>
+                </div>
               ))}
             </div>
           </ScrollArea>
@@ -101,11 +109,11 @@ export default function DocumentDashboard() {
 
       <Card className="flex-1 m-4 overflow-hidden">
         {selectedDoc ? (
-          // <DocumentDetails
-          //   document={selectedDoc}
-          //   onBack={() => setSelectedDoc(null)}
-          // />
-          <p>hi</p>
+          <DocumentDetails
+            document={selectedDoc}
+            onBack={() => setSelectedDoc(null)}
+          />
+          
         ) : (
           <CardContent className="h-full flex items-center justify-center">
             <p className="text-muted-foreground">
