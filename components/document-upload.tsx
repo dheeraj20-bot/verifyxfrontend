@@ -26,6 +26,7 @@ export default function DocumentUpload() {
   const [files, setFiles] = useState<File[]>([])
   const [uploadProgress, setUploadProgress] = useState(0)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
+  
 
   const { handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -70,14 +71,14 @@ export default function DocumentUpload() {
     })
 
     try {
-      const response = await axios.post('http://localhost:5000/api/documents/upload', formData, {
+      const response = await axios.post('https://verifybackend.onrender.com/api/documents/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round((progressEvent.loaded * 100) / (progressEvent.total ?? 1))
           setUploadProgress(percentCompleted)
         }
       })
-
+      
       setUploadStatus('Upload successful')
       console.log('Upload response:', response.data)
     } catch (error) {
