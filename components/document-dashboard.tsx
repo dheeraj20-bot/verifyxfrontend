@@ -1,23 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import DocumentDetails from "@/components/document-details";
 import axios from "axios";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
+
+import { Button } from "./ui/button";
 
 // Mock data for documents
 
- type DocumentListItem = {
+type DocumentListItem = {
   id: string;
   score: string;
   status: string;
@@ -25,9 +26,10 @@ import {
   createdAt: string;
 };
 
-
 export default function DocumentDashboard() {
   const [documents, setDocuments] = useState<DocumentListItem[]>([]);
+  // console.log(documents);
+
   const [selectedDoc, setSelectedDoc] = useState<Document | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -42,9 +44,7 @@ export default function DocumentDashboard() {
         "https://verifybackend.onrender.com/api/documents/submissions"
       );
 
-      console.log(response.data.data);
-      
-
+      // console.log(response.data.data);
       setDocuments(response.data.data);
     } catch (err) {
       setError("Failed to fetch documents");
@@ -69,39 +69,32 @@ export default function DocumentDashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[calc(100vh-200px)]">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className=" text-center">Document ID</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Document Type</TableHead>
-                  <TableHead>Issuer Country</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {documents.map((doc, index) => (
-                  <TableRow
-                    key={index}
-                    
-                    className={`cursor-pointer hover:bg-slate-100 ${
-                      index % 2 === 0 ? "bg-white" : "bg-slate-50"
-                    }`}
-                  >
-                    <TableCell
-                      className="font-medium w-[10rem] items-center
-                     justify-center flex  gap-3"
-                    >
-                      <img src={doc.imageUrl} alt="" width={50} height={50} />
-                      {doc.id}
-                    </TableCell>
-                    <TableCell>{doc.score}</TableCell>
-                    <TableCell>{doc.status}</TableCell>
-                    <TableCell>{doc.score}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+          <ScrollArea className="h-[calc(100vh-200px)] w-full">
+            <div className="grid grid-cols-2 gap-4 p-4">
+              {documents.map((doc, index) => (
+                <Card key={index} className="overflow-hidden">
+                  <CardContent className="p-4">
+                    <div className="flex items-center gap-2  mb-2">
+                      <div className="bg-primary/10 py-2 px-2">
+                        <img
+                          src={doc.imageUrl}
+                          alt={`Document ${doc.id}`}
+                          className="  w-32 h-32 object-cover"
+                        />
+                      </div>
+
+                      <span className="text-sm w-full">{doc.id}</span>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="bg-gray-50 p-2 ml-24 flex justify-between ">
+                    <p>{doc.score}</p>
+                    <Button className=" rounded-lg bg-primary text-white">
+                      Review
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div>
           </ScrollArea>
         </CardContent>
       </Card>

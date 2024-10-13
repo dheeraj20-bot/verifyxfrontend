@@ -9,7 +9,8 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { X, Upload } from "lucide-react";
+import { X, Upload, Circle } from "lucide-react";
+import Image from "next/image";
 
 // Custom Zod schema for File type
 const FileSchema = z.custom<File>((v) => v instanceof File, {
@@ -190,10 +191,9 @@ export default function DocumentUpload() {
                   <h2>Analysis Response</h2>
                    <div> 
                     {analysisResponse.map((data:any)=>(
-                       <div key={data.id}>
-                        
-                        <img src={data.imageUrl} alt="" width={1000} height={1000} className="rounded-3xl" />
+                       <div>
                         {data.score}
+                        <img src={data.imageUrl} alt="" width={1000} height={1000} className="rounded-md" />
                        </div>
                     ))}
                      
