@@ -9,7 +9,7 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { X, Upload, Circle } from "lucide-react";
+import { X, Upload } from "lucide-react";
 
 // Custom Zod schema for File type
 const FileSchema = z.custom<File>((v) => v instanceof File, {
@@ -28,9 +28,9 @@ export default function DocumentUpload() {
   const [files, setFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [error,setError] = useState<string | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [analysisResponse, setAnalysisResponse] = useState<any | null>(null); // State to store the response
-  console.log(analysisResponse);
 
   const {
     handleSubmit,
@@ -92,8 +92,10 @@ export default function DocumentUpload() {
       console.log("Upload response:", response.data);
       setAnalysisResponse(response.data); // Store the response in the state
     } catch (error) {
-      setUploadStatus("Upload failed");
+        setError("Something Went Wrong!")
       console.error("Upload error:", error);
+    }finally{
+      setLoading(false);
     }
 
     setFiles([]);
@@ -175,25 +177,30 @@ export default function DocumentUpload() {
             )}
           </Button>
 
+          {
+            error && (
+              <p>{error}</p>
+            )
+          }
+
           {/* Display the analysis response if available */}
-          {analysisResponse && (
-            <div className="mt-4">
-              <h3 className="font-semibold">Analysis Results</h3>
-              <pre className="bg-gray-100 p-2 rounded-md overflow-auto">
-                {analysisResponse.map((data: any) => (
-                  <div
-                    className="flex justify-between items-center"
-                    key={data.score}
-                  >
-                    <p> {data.score}</p>
-                    <p>{data.file_type}</p>
-                   
-                    
-                  </div>
-                ))}
-              </pre>
+            <div>
+              {analysisResponse && (
+                <div>
+                  <h2>Analysis Response</h2>
+                   <div> 
+                    {analysisResponse.map((data:any)=>(
+                       <div>
+                        
+                        <img src={data.imageUrl} alt="" width={1000} height={1000} className="rounded-3xl" />
+                        {data.score}
+                       </div>
+                    ))}
+                     
+                   </div>
+                </div>
+              )}
             </div>
-          )}
         </form>
       </CardContent>
     </Card>
