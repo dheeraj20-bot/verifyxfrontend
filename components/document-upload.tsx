@@ -190,7 +190,7 @@ export default function DocumentUpload() {
                   <h2>Analysis Response</h2>
                    <div> 
                     {analysisResponse.map((data:any)=>(
-                       <div>
+                       <div key={data.id}>
                         
                         <img src={data.imageUrl} alt="" width={1000} height={1000} className="rounded-3xl" />
                         {data.score}
