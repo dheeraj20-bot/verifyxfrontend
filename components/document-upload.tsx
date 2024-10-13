@@ -1,94 +1,104 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { useDropzone } from 'react-dropzone'
-import axios from 'axios'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { X, Upload } from 'lucide-react'
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useDropzone } from "react-dropzone";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { X, Upload, Circle } from "lucide-react";
 
 // Custom Zod schema for File type
 const FileSchema = z.custom<File>((v) => v instanceof File, {
   message: "Must be a File object",
-})
+});
 
 const schema = z.object({
-  documents: z.array(FileSchema).min(1, { message: "At least one file is required" })
-})
+  documents: z
+    .array(FileSchema)
+    .min(1, { message: "At least one file is required" }),
+});
 
-type FormData = z.infer<typeof schema>
+type FormData = z.infer<typeof schema>;
 
 export default function DocumentUpload() {
-  const [files, setFiles] = useState<File[]>([])
-  const [uploadProgress, setUploadProgress] = useState(0)
-  const [uploadStatus, setUploadStatus] = useState<string | null>(null)
-  
+  const [files, setFiles] = useState<File[]>([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+  const [analysisResponse, setAnalysisResponse] = useState<any | null>(null); // State to store the response
+  console.log(analysisResponse);
 
-  const { handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
+  const {
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       documents: [],
     },
-  })
+  });
 
   const onDrop = (acceptedFiles: File[]) => {
-    setFiles(prevFiles => {
-      const newFiles = [...prevFiles, ...acceptedFiles]
-      setValue('documents', newFiles)
-      return newFiles
-    })
-  }
+    setFiles((prevFiles) => {
+      const newFiles = [...prevFiles, ...acceptedFiles];
+      setValue("documents", newFiles);
+      return newFiles;
+    });
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'application/pdf': ['.pdf'],
-      'image/png': ['.png'],
-      'image/jpeg': ['.jpg', '.jpeg'],
+      "application/pdf": [".pdf"],
+      "image/png": [".png"],
+      "image/jpeg": [".jpg", ".jpeg"],
     },
     multiple: true,
-  })
+  });
 
   const removeFile = (fileToRemove: File) => {
-    setFiles(prevFiles => {
-      const newFiles = prevFiles.filter(file => file !== fileToRemove)
-      setValue('documents', newFiles)
-      return newFiles
-    })
-  }
+    setFiles((prevFiles) => {
+      const newFiles = prevFiles.filter((file) => file !== fileToRemove);
+      setValue("documents", newFiles);
+      return newFiles;
+    });
+  };
 
   const onSubmit = async (data: FormData) => {
-    setUploadProgress(0)
-    setUploadStatus(null)
+    setUploadProgress(0);
+    setUploadStatus(null);
 
-    const formData = new FormData()
+    const formData = new FormData();
     data.documents.forEach((document, index) => {
-      formData.append('documents', document)  // Field name must match backend (documents)
-    })
+      formData.append("documents", document); // Field name must match backend (documents)
+    });
 
     try {
-      const response = await axios.post('https://verifybackend.onrender.com/api/documents/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / (progressEvent.total ?? 1))
-          setUploadProgress(percentCompleted)
+      setLoading(true);
+      const response = await axios.post(
+        "https://verifybackend.onrender.com/api/documents/upload",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
         }
-      })
-      
-      setUploadStatus('Upload successful')
-      console.log('Upload response:', response.data)
+      );
+
+      setLoading(false);
+      console.log("Upload response:", response.data);
+      setAnalysisResponse(response.data); // Store the response in the state
     } catch (error) {
-      setUploadStatus('Upload failed')
-      console.error('Upload error:', error)
+      setUploadStatus("Upload failed");
+      console.error("Upload error:", error);
     }
 
-    setFiles([])
-    setValue('documents', [])
-  }
+    setFiles([]);
+    setValue("documents", []);
+  };
 
   return (
     <Card className="w-full bg-white rounded-lg max-w-md h-full px-2 mx-auto">
@@ -97,8 +107,8 @@ export default function DocumentUpload() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div 
-            {...getRootProps()} 
+          <div
+            {...getRootProps()}
             className="border-2 border-dashed border-gray-300 p-6 rounded-md text-center cursor-pointer"
             role="button"
             aria-label="Drag and drop files or click to select files"
@@ -110,19 +120,28 @@ export default function DocumentUpload() {
               <p>Drag and drop files here, or click to select files</p>
             )}
             <Upload className="mx-auto mt-2" aria-hidden="true" />
-            <p className="text-sm text-gray-500 mt-2">Supported formats: PDF, JPEG, PNG</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Supported formats: PDF, JPEG, PNG
+            </p>
           </div>
 
-          {errors.documents && <p className="text-red-500 text-sm" role="alert">{errors.documents.message}</p>}
+          {errors.documents && (
+            <p className="text-red-500 text-sm" role="alert">
+              {errors.documents.message}
+            </p>
+          )}
 
           {files.length > 0 && (
             <div className="space-y-2">
               {files.map((file, index) => (
-                <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded">
+                <div
+                  key={index}
+                  className="flex items-center justify-between bg-gray-100 p-2 rounded"
+                >
                   <span className="text-sm truncate">{file.name}</span>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     onClick={() => removeFile(file)}
                     aria-label={`Remove ${file.name}`}
                   >
@@ -135,22 +154,48 @@ export default function DocumentUpload() {
 
           {uploadProgress > 0 && (
             <div className="space-y-2">
-              <Progress value={uploadProgress} className="w-full" aria-label={`Upload progress: ${uploadProgress}%`} />
+              <Progress
+                value={uploadProgress}
+                className="w-full"
+                aria-label={`Upload progress: ${uploadProgress}%`}
+              />
               <p className="text-sm text-center">{uploadProgress}% uploaded</p>
             </div>
           )}
 
-          {uploadStatus && (
-            <p className={`text-sm text-center ${uploadStatus === 'Upload successful' ? 'text-green-500' : 'text-red-500'}`} role="status">
-              {uploadStatus}
-            </p>
-          )}
-
-          <Button type="submit" className="w-full" disabled={files.length === 0}>
-            Submit for Verification
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={files.length === 0 || loading}
+          >
+            {loading ? (
+              <p>Scanning Documents...</p>
+            ) : (
+              <p>Submit for Verification</p>
+            )}
           </Button>
+
+          {/* Display the analysis response if available */}
+          {analysisResponse && (
+            <div className="mt-4">
+              <h3 className="font-semibold">Analysis Results</h3>
+              <pre className="bg-gray-100 p-2 rounded-md overflow-auto">
+                {analysisResponse.map((data: any) => (
+                  <div
+                    className="flex justify-between items-center"
+                    key={data.score}
+                  >
+                    <p> {data.score}</p>
+                    <p>{data.file_type}</p>
+                   
+                    
+                  </div>
+                ))}
+              </pre>
+            </div>
+          )}
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
