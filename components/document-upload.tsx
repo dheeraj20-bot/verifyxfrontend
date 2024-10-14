@@ -193,7 +193,7 @@ export default function DocumentUpload() {
                     {analysisResponse.map((data:any)=>(
                        <div key={data.id}>
                         {data.score}
-                        <img src={data.imageUrl} alt="" width={1000} height={1000} className="rounded-md" />
+                        {/* <img src={data.imageUrl} alt="" width={1000} height={1000} className="rounded-md" /> */}
                        </div>
                     ))}
                      
