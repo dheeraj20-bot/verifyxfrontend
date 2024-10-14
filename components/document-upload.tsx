@@ -82,7 +82,7 @@ export default function DocumentUpload() {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://verifybackend.onrender.com/api/documents/upload",
+        "http://localhost:5000/api/documents/upload",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
