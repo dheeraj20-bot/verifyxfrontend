@@ -50,7 +50,7 @@ export default function DocumentDashboard() {
   const fetchDocuments = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/documents/submissions"
+        "https://verifybackend.onrender.com/api/documents/submissions"
       );
 
       console.log(response.data.data);

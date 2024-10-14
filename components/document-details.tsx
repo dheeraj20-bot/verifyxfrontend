@@ -30,35 +30,10 @@ import {
 import IndicatorsList from "./IndicatorsList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
-import Image from "next/image";
 import PDFViewer from "./pdf-viewer";
 
 export const description = "Document verification details";
 
-const indicatorsData = [
-  {
-    indicator_id: "low_resolution",
-    type: "INFO",
-    category: "low_quality_image",
-    title: "Document has low resolution",
-    description:
-      "Resolution of images stored in this document is too low for reliable analysis. Some detectors may be disabled.",
-    metadata: null,
-    indicator_attributes: null,
-    origin: "fraud",
-  },
-  {
-    indicator_id: "has_flash_reflections",
-    type: "INFO",
-    category: "low_quality_image",
-    title: "Document contains flash reflections",
-    description:
-      "This document contains images with flash reflections which may reduce the detection capabilities.",
-    metadata: null,
-    indicator_attributes: null,
-    origin: "fraud",
-  },
-];
 
 const chartConfig = {
   progress: {
