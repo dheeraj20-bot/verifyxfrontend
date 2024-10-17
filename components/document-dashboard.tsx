@@ -142,16 +142,13 @@ export default function DocumentDashboard() {
                         <div className="flex  justify-between items-center   ">
                           <p
                             className={`${
-                              doc.score === "WARNING" || doc.score === "HIGH_RISK"
+                              doc.score === "HIGH_RISK"
                                 ? " text-red-400"
                                 : doc.score === "TRUSTED" 
                                 ? " text-green-400"
-                                :doc.score==="NORMAL"? " text-blue-400":" text-slate-800"
-                            } text-sm `}
+                                :doc.score==="NORMAL"? " text-blue-400":" text-yellow-500"
+                            } text-sm font-semibold bg-black `}
                           >
-                            <strong className="text-sm text-slate-800 mr-4">
-                              Score:
-                            </strong>
                             {formatText(doc.score)}
                           </p>
                           <Button
