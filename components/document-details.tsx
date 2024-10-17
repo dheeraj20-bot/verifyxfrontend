@@ -12,7 +12,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
-  
   FileText,
   Image as ImageIcon,
   AlertTriangle,
@@ -156,15 +155,10 @@ export default function DocumentDetails({
           }
         >
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="preview">Preview</TabsTrigger>
             <TabsTrigger value="details">Details</TabsTrigger>
+            <TabsTrigger value="preview">Preview</TabsTrigger>
           </TabsList>
-          <TabsContent value="preview" className="mt-4">
-            <div className="bg-muted w-full h-full  rounded-lg">
-              {renderFilePreview()}
-            </div>
-          </TabsContent>
-
+          
           <TabsContent value="details" className="">
             <div className="flex flex-col gap-4  ">
               <div className="w-full items-center justify-center  h-full shadow-sm">
@@ -301,6 +295,16 @@ export default function DocumentDetails({
               </div>
             </div>
           </TabsContent>
+
+          <TabsContent value="preview" className="mt-4">
+            <div className="bg-muted w-full h-full  rounded-lg">
+              {renderFilePreview()}
+            </div>
+          </TabsContent>
+
+         
+
+
         </Tabs>
 
         <Separator />
