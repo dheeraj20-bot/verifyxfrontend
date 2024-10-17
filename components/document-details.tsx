@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,6 +10,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
+
 import {
   ChevronLeft,
   FileText,
@@ -80,6 +83,28 @@ export default function DocumentDetails({
   document,
   onBack,
 }: DocumentDetailsProps) {
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  
+  const generatePDF = async () => {
+    if (!contentRef.current) return
+
+    try {
+      const canvas = await html2canvas(contentRef.current)
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+      })
+
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height)
+      pdf.save('generated-pdf.pdf')
+    } catch (error) {
+      console.error('Error generating PDF:', error)
+    }
+  }
+
   const [activeTab, setActiveTab] = useState<"details" | "preview">("details");
 
   const getProgressPercentage = (score: string) => {
@@ -94,6 +119,7 @@ export default function DocumentDetails({
     }
   };
   const progress = document ? getProgressPercentage(document.score) : 0;
+   
 
   const chartData = [
     { name: "progress", value: progress, fill: "var(--color-progress)" },
@@ -132,7 +158,7 @@ export default function DocumentDetails({
   };
 
   return (
-    <Card className="w-full max-w-6xl mx-auto">
+    <Card ref={contentRef} className="w-full max-w-6xl mx-auto">
       <CardHeader>
         <div className="flex items-center justify-between">
           <Button variant="ghost" size="icon" onClick={onBack}>
@@ -319,14 +345,8 @@ export default function DocumentDetails({
           )}
         </div>
       </CardContent>
-      <CardFooter className="flex justify-between items-center">
-        <Button variant="outline" onClick={onBack}>
-          Back to List
-        </Button>
-        <div className="space-x-2">
-          <Button variant="destructive">Decline</Button>
-          <Button variant="default">Approve</Button>
-        </div>
+      <CardFooter className="flex justify-center items-center">
+      <Button onClick={generatePDF}>Generate PDF</Button>
       </CardFooter>
     </Card>
   );
