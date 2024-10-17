@@ -80,7 +80,7 @@ export default function DocumentDetails({
   document,
   onBack,
 }: DocumentDetailsProps) {
-  const [activeTab, setActiveTab] = useState<"preview" | "details">("preview");
+  const [activeTab, setActiveTab] = useState<"details" | "preview">("details");
 
   const getProgressPercentage = (score: string) => {
     switch (score) {
@@ -151,7 +151,7 @@ export default function DocumentDetails({
         <Tabs
           value={activeTab}
           onValueChange={(value) =>
-            setActiveTab(value as "preview" | "details")
+            setActiveTab(value as  "details" | "preview")
           }
         >
           <TabsList className="grid w-full grid-cols-2">
@@ -301,10 +301,6 @@ export default function DocumentDetails({
               {renderFilePreview()}
             </div>
           </TabsContent>
-
-         
-
-
         </Tabs>
 
         <Separator />
