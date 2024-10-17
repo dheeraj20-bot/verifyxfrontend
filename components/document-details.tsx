@@ -109,11 +109,12 @@ export default function DocumentDetails({
 
   const getProgressPercentage = (score: string) => {
     switch (score) {
-      case "LOW_RISK":
+      case "TRUSTED":
         return 100;
       case "NORMAL":
         return 70;
-
+      case "WARNING":
+        return 70;
       default:
         return 0;
     }
@@ -144,7 +145,7 @@ export default function DocumentDetails({
 
   const getStatusIcon = (score: string) => {
     switch (score) {
-      case "LOW_RISK":
+      case "TRUSTED":
         return <ThumbsUp className="text-green-500" />;
       case "NORMAL":
         return <ThumbsUp className="text-blue-500" />;

@@ -144,7 +144,7 @@ export default function DocumentDashboard() {
                             className={`${
                               doc.score === "WARNING" || doc.score === "HIGH_RISK"
                                 ? " text-red-400"
-                                : doc.score === "LOW_RISK"
+                                : doc.score === "TRUSTED" 
                                 ? " text-green-400"
                                 :doc.score==="NORMAL"? " text-blue-400":" text-slate-800"
                             } text-sm `}
