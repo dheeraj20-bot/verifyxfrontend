@@ -56,6 +56,18 @@ export default function DocumentDashboard() {
   const [selectedDoc, setSelectedDoc] = useState<DocumentListItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+   const getScoreStyles = (score: string | undefined) => {
+    switch (score) {
+      case "HIGH_RISK":
+        return "bg-red-900 text-red-400"
+      case "TRUSTED":
+        return "bg-green-900 text-green-400"
+      case "NORMAL":
+        return "bg-blue-900 text-blue-400"
+      default:
+        return "bg-yellow-900 text-yellow-500"
+    }
+  }
 
   useEffect(() => {
     fetchDocuments();
@@ -143,11 +155,11 @@ export default function DocumentDashboard() {
                           <p
                             className={`${
                               doc.score === "HIGH_RISK"
-                                ? " text-red-400"
+                                ? " text-red-700 bg-pink-500/60"
                                 : doc.score === "TRUSTED" 
-                                ? " text-green-400"
-                                :doc.score==="NORMAL"? " text-blue-400":" text-yellow-500"
-                            } text-sm font-semibold bg-black `}
+                                ? " text-green-700 bg-green-500/60"
+                                :doc.score==="NORMAL"? " text-blue-700 bg-blue-500/60":" text-yellow-700 bg-yellow-500/60"
+                            } text-sm font-semibold  px-2 py-1 rounded-full inline-block`}
                           >
                             {formatText(doc.score)}
                           </p>
