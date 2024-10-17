@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -13,8 +12,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import {
   ChevronLeft,
-  Check,
-  TrendingUp,
+  
   FileText,
   Image as ImageIcon,
   AlertTriangle,
@@ -29,11 +27,9 @@ import {
 } from "@/components/ui/chart";
 import IndicatorsList from "./IndicatorsList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
 import PDFViewer from "./pdf-viewer";
 
 export const description = "Document verification details";
-
 
 const chartConfig = {
   progress: {
@@ -45,7 +41,6 @@ const chartConfig = {
     color: "hsl(var(--muted))",
   },
 } satisfies ChartConfig;
-
 
 interface Indicator {
   id: string;
@@ -60,6 +55,12 @@ interface Document {
   fileUrl?: string;
   indicators?: Indicator[];
   fileType?: "image" | "pdf";
+  name?: string;
+  address?: string;
+  address_complete?: boolean;
+  country_name?: string;
+  document_type?: string;
+  description_summary?: string;
   createdAt: string;
   status: string;
 }
@@ -69,6 +70,13 @@ interface DocumentDetailsProps {
   onBack: () => void;
 }
 
+const formatText = (text: string): string => {
+  return text
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 export default function DocumentDetails({
   document,
   onBack,
@@ -77,8 +85,10 @@ export default function DocumentDetails({
 
   const getProgressPercentage = (score: string) => {
     switch (score) {
-      case "NORMAL":
+      case "LOW_RISK":
         return 100;
+      case "NORMAL":
+        return 70;
 
       default:
         return 0;
@@ -96,33 +106,34 @@ export default function DocumentDetails({
   ];
 
   const renderFilePreview = () => {
-    if(document.fileType==="image"){
+    if (document.fileType === "image") {
       return (
         <img src={document?.fileUrl} alt="" className=" w-full object-cover" />
-      )
+      );
     }
 
-    if(document.fileType==="pdf"){
-      return (
-        <PDFViewer pdfUrl={document.fileUrl !} />
-      )
+    if (document.fileType === "pdf") {
+      return <PDFViewer pdfUrl={document.fileUrl!} />;
     }
-   
   };
 
   const getStatusIcon = (score: string) => {
     switch (score) {
-      case "NORMAL":
+      case "LOW_RISK":
         return <ThumbsUp className="text-green-500" />;
+      case "NORMAL":
+        return <ThumbsUp className="text-blue-500" />;
       case "WARNING":
         return <AlertTriangle className="text-yellow-500" />;
+      case "HIGH_RISK":
+        return <AlertTriangle className="text-red-500" />;
       default:
         return <AlertTriangle className="text-red-500" />;
     }
   };
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
         <div className="flex items-center justify-between">
           <Button variant="ghost" size="icon" onClick={onBack}>
@@ -133,7 +144,7 @@ export default function DocumentDetails({
           </CardTitle>
           <div className="flex items-center space-x-2">
             {getStatusIcon(document.score)}
-            <span className="font-semibold">{document.score}</span>
+            <span className="font-semibold">{formatText(document.score)}</span>
           </div>
         </div>
       </CardHeader>
@@ -149,16 +160,17 @@ export default function DocumentDetails({
             <TabsTrigger value="details">Details</TabsTrigger>
           </TabsList>
           <TabsContent value="preview" className="mt-4">
-            <div className="bg-muted w-full h-full p-2 rounded-lg">{renderFilePreview()}</div>
+            <div className="bg-muted w-full h-full  rounded-lg">
+              {renderFilePreview()}
+            </div>
           </TabsContent>
-          <TabsContent value="details" className="mt-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 ">
-              <div>
-               
 
+          <TabsContent value="details" className="">
+            <div className="flex flex-col gap-4  ">
+              <div className="w-full items-center justify-center  h-full shadow-sm">
                 <ChartContainer
                   config={chartConfig}
-                  className="aspect-square max-h-[200px]"
+                  className=" max-h-[200px] w-full"
                 >
                   <PieChart>
                     <ChartTooltip
@@ -205,41 +217,87 @@ export default function DocumentDetails({
                   </PieChart>
                 </ChartContainer>
               </div>
+
               <div>
                 <h3 className="text-lg font-semibold mb-2">
                   Document Information
                 </h3>
-                <dl className="space-y-2">
-                  <div>
-                    <dt className="text-sm font-medium text-muted-foreground">
-                      Document ID:
-                    </dt>
-                    <dd className="flex items-center tex-sm mt-1">
-                      {document.id}
-                    </dd>
+
+                <div className="flex">
+                  <div className="w-full ">
+                    <dl className="space-y-2 w-full">
+                      <div>
+                        <dt className="text-sm font-medium text-muted-foreground">
+                          Name
+                        </dt>
+                        <dd className="flex items-center tex-sm mt-1">
+                          {document.name}
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt className="text-sm font-medium text-muted-foreground">
+                          Address:
+                        </dt>
+                        <dd className="flex items-center mt-1">
+                          <p>{document.address}  <span> {document.address_complete? "✅":"❌"}</span>  </p>
+                        </dd>
+                      </div>
+
+                      <div>
+                        <dt className="text-sm font-medium text-muted-foreground">
+                          Country
+                        </dt>
+                        <dd className="mt-1">
+                          {document.country_name}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-sm font-medium text-muted-foreground">
+                          Document Type
+                        </dt>
+                        <dd className="mt-1">
+                          {document.document_type}
+                        </dd>
+                      </div>
+                    </dl>
                   </div>
-                  <div>
-                    <dt className="text-sm font-medium text-muted-foreground">
-                      File Type
-                    </dt>
-                    <dd className="flex items-center mt-1">
-                      {
-                        document.fileType==="image"?(<ImageIcon className="mr-2 h-4 w-4" />):(<FileText className="mr-2 h-4 w-4" />)
-                      }
-                      
-                      <p>{document.fileType?.toUpperCase()}</p>
-                      
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-sm font-medium text-muted-foreground">
-                      Created At
-                    </dt>
-                    <dd className="mt-1">
-                      {new Date(document.createdAt).toLocaleString()}
-                    </dd>
-                  </div>
-                </dl>
+
+                  <dl className="space-y-2 w-full">
+                    <div>
+                      <dt className="text-sm font-medium text-muted-foreground">
+                        Document ID:
+                      </dt>
+                      <dd className="flex items-center tex-sm mt-1">
+                        {document.id}
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt className="text-sm font-medium text-muted-foreground">
+                        File Type
+                      </dt>
+                      <dd className="flex items-center mt-1">
+                        {document.fileType === "image" ? (
+                          <ImageIcon className="mr-2 h-4 w-4" />
+                        ) : (
+                          <FileText className="mr-2 h-4 w-4" />
+                        )}
+
+                        <p>{document.fileType?.toUpperCase()}</p>
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt className="text-sm font-medium text-muted-foreground">
+                        Created At
+                      </dt>
+                      <dd className="mt-1">
+                        {new Date(document.createdAt).toLocaleString()}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
               </div>
             </div>
           </TabsContent>
@@ -248,15 +306,17 @@ export default function DocumentDetails({
         <Separator />
 
         <div>
+          <h3 className="text-xl font-semibold mb-4">Document Summary</h3>
+          <p>{document.description_summary}</p>
+        </div>
+
+        <div>
           <h3 className="text-xl font-semibold mb-4">
             Verification Indicators
           </h3>
-          {
-            document.indicators && (
-              <IndicatorsList indicators={document.indicators} />
-            )
-          }
-         
+          {document.indicators && (
+            <IndicatorsList indicators={document.indicators} />
+          )}
         </div>
       </CardContent>
       <CardFooter className="flex justify-between items-center">

@@ -32,7 +32,21 @@ type DocumentListItem = {
   fileUrl: string;
   fileType: "image" | "pdf";
   createdAt: string;
+  name?: string;
+  address_complete?:boolean
+  address?: string;
+  country_name?: string;
+  document_type?: string;
+  description_summary?: string;
+
   indicators?: Indicator[];
+};
+
+const formatText = (text: string): string => {
+  return text
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 };
 
 export default function DocumentDashboard() {
@@ -76,9 +90,17 @@ export default function DocumentDashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[calc(100vh-100px)] w-full">
+
+       {documents.length === 0 && <div className="flex justify-center items-center h-[30rem]">
+            <h3 className=" text-xl text-primary/90 font-semibold">No Documents Found</h3>
+          </div>}
+
+
+         { documents &&  <ScrollArea className="h-[calc(100vh-100px)] w-full">
+         
             <div className="flex flex-col h-full  w-full gap-4 p-4">
-              {documents.map((doc, index) => (
+
+              {   documents?.map((doc, index) => (
                 <div
                   key={index}
                   className="overflow-hidden  rounded-xl shadow-lg border border-slate-700/10"
@@ -120,17 +142,17 @@ export default function DocumentDashboard() {
                         <div className="flex  justify-between items-center   ">
                           <p
                             className={`${
-                              doc.score === "WARNING"
+                              doc.score === "WARNING" || doc.score === "HIGH_RISK"
                                 ? " text-red-400"
-                                : doc.score === "NORMAL"
+                                : doc.score === "LOW_RISK"
                                 ? " text-green-400"
-                                : " text-slate-700"
+                                :doc.score==="NORMAL"? " text-blue-400":" text-slate-800"
                             } text-sm `}
                           >
                             <strong className="text-sm text-slate-800 mr-4">
                               Score:
                             </strong>
-                            {doc.score}
+                            {formatText(doc.score)}
                           </p>
                           <Button
                             onClick={() => setSelectedDoc(doc)}
@@ -145,7 +167,7 @@ export default function DocumentDashboard() {
                 </div>
               ))}
             </div>
-          </ScrollArea>
+          </ScrollArea>}
         </CardContent>
       </Card>
 

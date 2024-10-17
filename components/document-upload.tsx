@@ -9,8 +9,8 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { X, Upload, Circle } from "lucide-react";
-import Image from "next/image";
+import { X, Upload } from "lucide-react";
+// import Image from "next/image";
 
 // Custom Zod schema for File type
 const FileSchema = z.custom<File>((v) => v instanceof File, {
