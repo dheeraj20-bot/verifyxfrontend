@@ -155,11 +155,11 @@ export default function DocumentDashboard() {
                           <p
                             className={`${
                               doc.score === "HIGH_RISK"
-                                ? " text-red-700 bg-pink-500/60"
+                                ? " text-red-700 bg-red-500/40"
                                 : doc.score === "TRUSTED" 
-                                ? " text-green-700 bg-green-500/60"
-                                :doc.score==="NORMAL"? " text-blue-700 bg-blue-500/60":" text-yellow-700 bg-yellow-500/60"
-                            } text-sm font-semibold  px-2 py-1 rounded-full inline-block`}
+                                ? " text-green-700 bg-green-500/40"
+                                :doc.score==="NORMAL"? " text-blue-700 bg-blue-500/40":" text-yellow-700 bg-yellow-500/40"
+                            } text-xs font-semibold  px-2 py-1 rounded-full inline-block`}
                           >
                             {formatText(doc.score)}
                           </p>
