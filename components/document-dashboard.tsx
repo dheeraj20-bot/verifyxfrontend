@@ -33,7 +33,7 @@ type DocumentListItem = {
   fileType: "image" | "pdf";
   createdAt: string;
   name?: string;
-  address_complete?:boolean
+  address_complete?: boolean;
   address?: string;
   country_name?: string;
   document_type?: string;
@@ -44,30 +44,30 @@ type DocumentListItem = {
 
 const formatText = (text: string): string => {
   return text
-    .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
 export default function DocumentDashboard() {
   const [documents, setDocuments] = useState<DocumentListItem[]>([]);
-  // console.log(documents);
+  console.log(documents);
 
   const [selectedDoc, setSelectedDoc] = useState<DocumentListItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-   const getScoreStyles = (score: string | undefined) => {
+  const getScoreStyles = (score: string | undefined) => {
     switch (score) {
       case "HIGH_RISK":
-        return "bg-red-900 text-red-400"
+        return "bg-red-900 text-red-400";
       case "TRUSTED":
-        return "bg-green-900 text-green-400"
+        return "bg-green-900 text-green-400";
       case "NORMAL":
-        return "bg-blue-900 text-blue-400"
+        return "bg-blue-900 text-blue-400";
       default:
-        return "bg-yellow-900 text-yellow-500"
+        return "bg-yellow-900 text-yellow-500";
     }
-  }
+  };
 
   useEffect(() => {
     fetchDocuments();
@@ -102,81 +102,85 @@ export default function DocumentDashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          {documents.length === 0 && (
+            <div className="flex justify-center items-center h-[30rem]">
+              <h3 className=" text-xl text-primary/90 font-semibold">
+                No Documents Found
+              </h3>
+            </div>
+          )}
 
-       {documents.length === 0 && <div className="flex justify-center items-center h-[30rem]">
-            <h3 className=" text-xl text-primary/90 font-semibold">No Documents Found</h3>
-          </div>}
-
-
-         { documents &&  <ScrollArea className="h-[calc(100vh-100px)] w-full">
-         
-            <div className="flex flex-col h-full  w-full gap-4 p-4">
-
-              {   documents?.map((doc, index) => (
-                <div
-                  key={index}
-                  className="overflow-hidden  rounded-xl shadow-lg border border-slate-700/10"
-                >
-                  <div className="p-4">
-                    <div className="flex items-center  gap-5  mb-2">
-                      <div className="bg-primary/10  overflow-hidden  rounded-[0.60rem] ">
-                        {doc.fileType === "image" ? (
-                          <img
-                            src={doc.fileUrl}
-                            alt={`Document ${doc.id}`}
-                            className="   w-60 h-40 object-cover hover:scale-110  transition-transform duration-300"
-                          />
-                        ) : (
-                          <img
-                            src="/pdf.webp"
-                            alt={`Document ${doc.id}`}
-                            className="w-60 h-40  "
-                          />
-                        )}
-                      </div>
-
-                      <div className="flex flex-col px-5  flex-1 space-y-10 ">
-                        <div>
-                          <p className="text-sm">
-                            <strong className=" text-slate-800 mr-4">
-                              Document ID:
-                            </strong>
-                            {doc.id.substring(0, 10)}
-                          </p>
-                          <p className="text-sm">
-                            <strong className=" text-slate-800 mr-4">
-                              Uploaded on:
-                            </strong>
-                            {moment(doc.createdAt).format("MM/DD/YYYY")}
-                          </p>
+          {documents && (
+            <ScrollArea className="h-[calc(100vh-100px)] w-full">
+              <div className="flex flex-col h-full  w-full gap-4 p-4">
+                {documents?.map((doc, index) => (
+                  <div
+                    key={index}
+                    className="overflow-hidden  rounded-xl shadow-lg border border-slate-700/10"
+                  >
+                    <div className="p-4">
+                      <div className="flex items-center  gap-5  mb-2">
+                        <div className="bg-primary/10  overflow-hidden  rounded-[0.60rem] ">
+                          {doc.fileType === "image" ? (
+                            <img
+                              src={doc.fileUrl}
+                              alt={`Document ${doc.id}`}
+                              className="   w-60 h-40 object-cover hover:scale-110  transition-transform duration-300"
+                            />
+                          ) : (
+                            <img
+                              src="/pdf.webp"
+                              alt={`Document ${doc.id}`}
+                              className="w-60 h-40  "
+                            />
+                          )}
                         </div>
 
-                        <div className="flex  justify-between items-center   ">
-                          <p
-                            className={`${
-                              doc.score === "HIGH_RISK"
-                                ? " text-red-700 bg-red-500/40"
-                                : doc.score === "TRUSTED" 
-                                ? " text-green-700 bg-green-500/40"
-                                :doc.score==="NORMAL"? " text-blue-700 bg-blue-500/40":" text-yellow-700 bg-yellow-500/40"
-                            } text-xs font-semibold  px-2 py-1 rounded-full inline-block`}
-                          >
-                            {formatText(doc.score)}
-                          </p>
-                          <Button
-                            onClick={() => setSelectedDoc(doc)}
-                            className=" rounded-[0.60rem] bg-primary text-white"
-                          >
-                            Review
-                          </Button>
+                        <div className="flex flex-col px-5  flex-1 space-y-10 ">
+                          <div>
+                            <p className="text-sm">
+                              <strong className=" text-slate-800 mr-4">
+                                Document ID:
+                              </strong>
+                              {doc.id.substring(0, 10)}
+                            </p>
+                            <p className="text-sm">
+                              <strong className=" text-slate-800 mr-4">
+                                Uploaded on:
+                              </strong>
+                              {moment(doc.createdAt).format("MM/DD/YYYY")}
+                            </p>
+                          </div>
+
+                          <div className="flex  justify-between items-center   ">
+                            <p
+                              className={`${
+                                doc.score === "HIGH_RISK"
+                                  ? " text-red-700 bg-red-500/40"
+                                  : doc.score === "TRUSTED"
+                                  ? " text-green-700 bg-green-500/40"
+                                  : doc.score === "NORMAL"
+                                  ? " text-blue-700 bg-blue-500/40"
+                                  : " text-yellow-700 bg-yellow-500/40"
+                              } text-xs font-semibold  px-2 py-1 rounded-full inline-block`}
+                            >
+                              {formatText(doc.score)}
+                            </p>
+                            <Button
+                              onClick={() => setSelectedDoc(doc)}
+                              className=" rounded-[0.60rem] bg-primary text-white"
+                            >
+                              Review
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          </ScrollArea>}
+                ))}
+              </div>
+            </ScrollArea>
+          )}
         </CardContent>
       </Card>
 

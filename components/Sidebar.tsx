@@ -4,13 +4,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from "@/components/ui/button"
-import { Upload, Settings, List, FileCheck, CherryIcon } from 'lucide-react'
+import {  Settings, List, FileCheck,LayoutDashboard, CherryIcon } from 'lucide-react'
 
 const navItems = [
-  { name: 'Upload', href: '/', icon: Upload },
-  { name: 'Settings', href: '/settings', icon: Settings },
-  { name: 'review', href: '/dashboard', icon: List },
+  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+  { name: 'Review', href: '/review', icon: List },
   { name: 'Verify', href: '/verify', icon: FileCheck },
+  { name: 'Settings', href: '/settings', icon: Settings },
 ]
 
 export default function Sidebar() {
@@ -21,7 +21,7 @@ export default function Sidebar() {
     <>
       {/* Sidebar for larger screens */}
       <aside 
-      className={`hidden md:flex flex-col w-64 bg-white p-4 ${isSidebarOpen ? '' : 'md:w-24'}`}>
+      className={`hidden md:flex flex-col transition-transform duration-200 w-64 bg-white p-4 ${isSidebarOpen ? '' : 'md:w-24'}`}>
         <Button
           variant="ghost"
           className="mb-4 justify-start"
