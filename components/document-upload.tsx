@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { X, Upload } from "lucide-react";
-import { redirect } from "next/navigation";
 // import Image from "next/image";
+import { useRouter } from 'next/navigation'
 
 // Custom Zod schema for File type
 const FileSchema = z.custom<File>((v) => v instanceof File, {
@@ -27,6 +27,8 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function DocumentUpload() {
+  const router = useRouter()
+
   const [files, setFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -92,7 +94,7 @@ export default function DocumentUpload() {
 
       setLoading(false);
       setAnalysisResponse(response.data);
-      redirect(`/review/${response.data.uploadId}`);
+      router.push(`review/${response.data.uploadId}`)
        // Store the response in the state
     } catch (error) {
         setError("Something Went Wrong!")
