@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { X, Upload } from "lucide-react";
+import { redirect } from "next/navigation";
 // import Image from "next/image";
 
 // Custom Zod schema for File type
@@ -90,8 +91,9 @@ export default function DocumentUpload() {
       );
 
       setLoading(false);
-      console.log("Upload response:", response.data);
-      setAnalysisResponse(response.data); // Store the response in the state
+      setAnalysisResponse(response.data);
+      redirect(`/review/${response.data.uploadId}`);
+       // Store the response in the state
     } catch (error) {
         setError("Something Went Wrong!")
       console.error("Upload error:", error);
