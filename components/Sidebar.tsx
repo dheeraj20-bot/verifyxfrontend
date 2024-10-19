@@ -8,7 +8,6 @@ import {  Settings, List, FileCheck,LayoutDashboard, CherryIcon } from 'lucide-r
 
 const navItems = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Review', href: '/review', icon: List },
   { name: 'Verify', href: '/verify', icon: FileCheck },
   { name: 'Settings', href: '/settings', icon: Settings },
 ]

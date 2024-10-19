@@ -165,7 +165,7 @@ export default function DocumentDetails({
           <Button variant="ghost" size="icon" onClick={onBack}>
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <CardTitle className="text-2xl font-bold text-primary">
+          <CardTitle className="text-3xl font-bold text-primary">
             Document Verification
           </CardTitle>
           <div className="flex items-center space-x-2">
