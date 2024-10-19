@@ -72,8 +72,8 @@ export default function RiskDashboard() {
       <div className="flex justify-between items-center mb-6">
         <div className="flex flex-col space-y-3">
           <h2 className="text-4xl font-bold">Hi John 👋</h2>
-          <h1 className="text-3xl text-primary font-bold">
-            Risk Management Dashboard
+          <h1 className="text-2xl text-primary font-bold">
+            Welcome to Fraud Fabric Dashboard
           </h1>
         </div>
 
