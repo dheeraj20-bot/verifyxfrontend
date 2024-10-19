@@ -94,7 +94,7 @@ export default function DocumentUpload() {
 
       setLoading(false);
       setAnalysisResponse(response.data);
-      router.push(`review/${response.data.data.uploadId}`)
+      router.push("/")
        // Store the response in the state
     } catch (error) {
         setError("Something Went Wrong!")
