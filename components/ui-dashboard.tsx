@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { CalendarIcon, DownloadIcon, FilterIcon } from "lucide-react";
+import { DownloadIcon, FilterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -24,15 +24,18 @@ import * as XLSX from "xlsx";
 import { useRouter } from "next/navigation";
 
 export default function RiskDashboard() {
-  const [dateRange, setDateRange] = useState("This Month");
   const [uploads, setUploads] = useState([]); // state to store fetched data
+  console.log(uploads);
+
   const router = useRouter();
 
   // Fetch the data from the API
   useEffect(() => {
     const fetchUploads = async () => {
       try {
-        const response = await axios.get("https://verifybackend.onrender.com/api/documents/dashboard");
+        const response = await axios.get(
+          "https://verifybackend.onrender.com/api/documents/dashboard"
+        );
         setUploads(response.data); // Set the data from the API
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -76,8 +79,6 @@ export default function RiskDashboard() {
             Welcome to Fraud Fabric Dashboard
           </h1>
         </div>
-
-       
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
@@ -98,7 +99,7 @@ export default function RiskDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-            High Risk Documents
+              High Risk Documents
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -111,8 +112,7 @@ export default function RiskDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-            Warning Documents
-
+              Warning Documents
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -125,7 +125,7 @@ export default function RiskDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-            Normal Documents
+              Normal Documents
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -166,10 +166,13 @@ export default function RiskDashboard() {
         </div>
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="bg-white">
               <TableHead>Upload ID</TableHead>
               <TableHead>Assigned to</TableHead>
-              <TableHead>Document Count</TableHead>
+              <TableHead>Documents</TableHead>
+              <TableHead className=" text-red-500">High Risk</TableHead>
+              <TableHead className="text-yellow-500">Warning Risk</TableHead>
+              <TableHead className="text-green-500">Normal</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -179,10 +182,17 @@ export default function RiskDashboard() {
               <TableRow key={upload.uploadId}>
                 <TableCell>UPID{upload.uploadId}</TableCell>
                 <TableCell>{upload.assignedTo}</TableCell>
-                <TableCell  >{upload.documentCount}</TableCell>
-                <TableCell>{new Date(upload.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>{upload.documentCount}</TableCell>
+                <TableCell>{upload.scoreCounts.highRisk}</TableCell>
+                <TableCell>{upload.scoreCounts.warning}</TableCell>
+                <TableCell>{upload.scoreCounts.normal}</TableCell>
                 <TableCell>
-                  <Button onClick={() => router.push(`/review/${upload.uploadId}`)}>
+                  {new Date(upload.createdAt).toLocaleDateString()}
+                </TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => router.push(`/review/${upload.uploadId}`)}
+                  >
                     View More
                   </Button>
                 </TableCell>

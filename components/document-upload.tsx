@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { X, Upload } from "lucide-react";
 // import Image from "next/image";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 
 // Custom Zod schema for File type
 const FileSchema = z.custom<File>((v) => v instanceof File, {
@@ -27,12 +27,12 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function DocumentUpload() {
-  const router = useRouter()
+  const router = useRouter();
 
   const [files, setFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [error,setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [analysisResponse, setAnalysisResponse] = useState<any | null>(null); // State to store the response
 
@@ -94,12 +94,12 @@ export default function DocumentUpload() {
 
       setLoading(false);
       setAnalysisResponse(response.data);
-      router.push("/")
-       // Store the response in the state
+      router.push("/");
+      // Store the response in the state
     } catch (error) {
-        setError("Something Went Wrong!")
+      setError("Something Went Wrong!");
       console.error("Upload error:", error);
-    }finally{
+    } finally {
       setLoading(false);
     }
 
@@ -182,29 +182,24 @@ export default function DocumentUpload() {
             )}
           </Button>
 
-          {
-            error && (
-              <p>{error}</p>
-            )
-          }
+          {error && <p>{error}</p>}
 
           {/* Display the analysis response if available */}
-            <div>
-              {analysisResponse && (
+          <div>
+            {analysisResponse && (
+              <div>
+                <h2>Analysis Response</h2>
                 <div>
-                  <h2>Analysis Response</h2>
-                   <div> 
-                    {analysisResponse.map((data:any)=>(
-                       <div key={data.id}>
-                        {data.score}
-                        {/* <img src={data.imageUrl} alt="" width={1000} height={1000} className="rounded-md" /> */}
-                       </div>
-                    ))}
-                     
-                   </div>
+                  {analysisResponse.map((data: any) => (
+                    <div key={data.id}>
+                      {data.score}
+                      {/* <img src={data.imageUrl} alt="" width={1000} height={1000} className="rounded-md" /> */}
+                    </div>
+                  ))}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+          </div>
         </form>
       </CardContent>
     </Card>

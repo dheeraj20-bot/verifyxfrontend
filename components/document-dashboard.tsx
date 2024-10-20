@@ -1,92 +1,87 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from "react"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import moment from "moment"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import DocumentDetails from "@/components/document-details"
-import axios from "axios"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import moment from "moment";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import DocumentDetails from "@/components/document-details";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Indicator {
-  id: string
-  indicator_id: string
-  category: string
-  title: string
-  description: string
+  id: string;
+  indicator_id: string;
+  category: string;
+  title: string;
+  description: string;
 }
 
 type DocumentListItem = {
-  id: string
-  score: string
-  status: string
-  fileUrl: string
-  fileType: "image" | "pdf"
-  createdAt: string
-  name?: string
-  address_complete?: boolean
-  address?: string
-  country_name?: string
-  document_type?: string
-  description_summary?: string
-  indicators?: Indicator[]
-}
+  id: string;
+  score: string;
+  status: string;
+  fileUrl: string;
+  fileType: "image" | "pdf";
+  createdAt: string;
+  name?: string;
+  address_complete?: boolean;
+  address?: string;
+  country_name?: string;
+  document_type?: string;
+  description_summary?: string;
+  indicators?: Indicator[];
+};
 
 const formatText = (text: string): string => {
   return text
     .split("_")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
-}
+    .join(" ");
+};
 
 export default function DocumentDashboard({ uploadId }: { uploadId: string }) {
-  const [documents, setDocuments] = useState<DocumentListItem[]>([])
-  const [selectedDoc, setSelectedDoc] = useState<DocumentListItem | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [detailsLoading, setDetailsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [documents, setDocuments] = useState<DocumentListItem[]>([]);
+  const [selectedDoc, setSelectedDoc] = useState<DocumentListItem | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [detailsLoading, setDetailsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchDocuments()
-  }, [uploadId])
+    fetchDocuments();
+  }, [uploadId]);
 
   const fetchDocuments = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await axios.get(
         `https://verifybackend.onrender.com/api/documents/${uploadId}`
-      )
-      setDocuments(response?.data?.documentSubmissions || [])
+      );
+      setDocuments(response?.data?.documentSubmissions || []);
     } catch (err) {
-      console.error(err)
-      setError("Failed to fetch documents")
+      console.error(err);
+      setError("Failed to fetch documents");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const fetchDocumentDetails = async (documentId: string) => {
     try {
-      setDetailsLoading(true)
+      setDetailsLoading(true);
       const response = await axios.get(
         `https://verifybackend.onrender.com/api/documents/${documentId}/details`
-      )
-      setSelectedDoc(response.data)
+      );
+      setSelectedDoc(response.data);
     } catch (err) {
-      console.error(err)
-      setError("Failed to fetch document details")
+      console.error(err);
+      setError("Failed to fetch document details");
     } finally {
-      setDetailsLoading(false)
+      setDetailsLoading(false);
     }
-  }
+  };
 
-  if (error) return <div className="text-red-500 p-4">Error: {error}</div>
+  if (error) return <div className="text-red-500 p-4">Error: {error}</div>;
 
   return (
     <main className="flex flex-col">
@@ -205,5 +200,5 @@ export default function DocumentDashboard({ uploadId }: { uploadId: string }) {
         </Card>
       </div>
     </main>
-  )
+  );
 }
