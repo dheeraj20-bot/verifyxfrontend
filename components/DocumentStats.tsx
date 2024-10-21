@@ -201,7 +201,7 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
                   key={index}
                   className={index % 2 === 0 ? "bg-gray-50" : ""}
                 >
-                  <TableCell className="font-medium">
+                  <TableCell className="font-medium capitalize ">
                     {doc.documentType}
                   </TableCell>
                   <TableCell>{doc.address}</TableCell>
