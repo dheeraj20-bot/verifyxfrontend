@@ -202,10 +202,10 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
                   className={index % 2 === 0 ? "bg-gray-50" : ""}
                 >
                   <TableCell className="font-medium  capitaliz ">
-                    {doc.name? doc.name: "Not Found" }
+                    {doc.documentType? doc.documentType: "Not Found" }
                   </TableCell>
                   <TableCell className="font-medium  ">
-                    {doc.documentType}
+                  {doc.name? doc.name: "Not Found" }
                   </TableCell>
                   <TableCell>{doc.address? doc.address: "Not Found"}  </TableCell>
                   <TableCell>
