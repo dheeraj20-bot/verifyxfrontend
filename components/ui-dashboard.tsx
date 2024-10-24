@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { DownloadIcon, FilterIcon } from "lucide-react";
+import { DownloadIcon, FilterIcon, SquareArrowOutUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -167,14 +167,13 @@ export default function RiskDashboard() {
         <Table>
           <TableHeader>
             <TableRow className="bg-white">
-              <TableHead>Upload ID</TableHead>
+              <TableHead className="font-semibold ">Upload ID</TableHead>
               <TableHead>Assigned to</TableHead>
               <TableHead>Documents</TableHead>
-              <TableHead className=" text-red-500">High Risk</TableHead>
-              <TableHead className="text-yellow-500">Warning Risk</TableHead>
-              <TableHead className="text-green-500">Normal</TableHead>
+              <TableHead>Status</TableHead>
+            
               <TableHead>Created At</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -183,18 +182,22 @@ export default function RiskDashboard() {
                 <TableCell>UPID{upload.uploadId}</TableCell>
                 <TableCell>{upload.assignedTo}</TableCell>
                 <TableCell>{upload.documentCount}</TableCell>
-                <TableCell>{upload.scoreCounts.highRisk}</TableCell>
-                <TableCell>{upload.scoreCounts.warning}</TableCell>
-                <TableCell>{upload.scoreCounts.normal}</TableCell>
+                <TableCell  >
+                  <span className={`${upload.overallStatus === "HIGH RISK" ? " bg-red-100 text-red-500" : "text-green-500 bg-green-100"} px-3 py-1 font-semibold rounded-2xl`}>
+                    {upload.overallStatus}
+                  </span>
+                  </TableCell>
+               
                 <TableCell>
                   {new Date(upload.createdAt).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
-                  <Button
+                  <SquareArrowOutUpRight
+                    className="h-5 text-primary cursor-pointer w-5"
                     onClick={() => router.push(`/review/${upload.uploadId}`)}
                   >
                     View More
-                  </Button>
+                  </SquareArrowOutUpRight>
                 </TableCell>
               </TableRow>
             ))}

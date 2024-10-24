@@ -21,7 +21,6 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 
 interface DocumentStats {
@@ -40,7 +39,7 @@ interface DocumentStats {
   addressentity: {
     documentType: string;
     address: string;
-    addressEntity: boolean;
+    name: string;
   }[];
 }
 
@@ -183,7 +182,7 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
           <CardTitle className="text-4xl text-primary font-bold">
-            Address Validation
+          Integrity Check
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -191,8 +190,9 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-1/4">Document Type</TableHead>
+                <TableHead className="w-1/4">Name</TableHead>
                 <TableHead className="w-1/2">Address</TableHead>
-                <TableHead className="w-1/4">Address Entity</TableHead>
+                <TableHead className="w-1/4">Address Validation</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -201,12 +201,15 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
                   key={index}
                   className={index % 2 === 0 ? "bg-gray-50" : ""}
                 >
-                  <TableCell className="font-medium capitalize ">
+                  <TableCell className="font-medium  capitaliz ">
+                    {doc.name}
+                  </TableCell>
+                  <TableCell className="font-medium  ">
                     {doc.documentType}
                   </TableCell>
-                  <TableCell>{doc.address}</TableCell>
+                  <TableCell>{doc.address? doc.address: "Not Found"}  </TableCell>
                   <TableCell>
-                    {doc.addressEntity ? (
+                    {stats.isConsistent.addressConsistent ? (
                       <Badge
                         className="flex bg-green-500
                     text-white
@@ -230,6 +233,8 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
               ))}
             </TableBody>
           </Table>
+
+
           <div
             className={`${
               stats.isConsistent.addressConsistent
@@ -237,17 +242,39 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
                 : "bg-yellow-50"
             } mt-6 p-4 border rounded-[0.8rem]  flex items-center gap-2`}
           >
-            <AlertTriangle
-              className={`${
-                stats.isConsistent.addressConsistent
-                  ? "text-green-700"
-                  : "text-yellow-700"
-              } w-4 h-4`}
-            />
+            {
+              stats.isConsistent.addressConsistent ? (
+                <Check className="text-green-700 w-4 h-4" />
+              ) : (
+                <AlertTriangle className="text-yellow-700 w-4 h-4" />
+              )
+            }
+            
             <span className="font-medium ">
               {stats.isConsistent.addressConsistent
                 ? "All addresses are consistent across documents."
                 : "Addresses are not consistent across all documents."}
+            </span>
+          </div>
+          <div
+            className={`${
+              stats.isConsistent.nameConsistent
+                ? "bg-green-50"
+                : "bg-yellow-50"
+            } mt-6 p-4 border rounded-[0.8rem]  flex items-center gap-2`}
+          >
+            {
+              stats.isConsistent.addressConsistent ? (
+                <Check className="text-green-700 w-4 h-4" />
+              ) : (
+                <AlertTriangle className="text-yellow-700 w-4 h-4" />
+              )
+            }
+            
+            <span className="font-medium ">
+              {stats.isConsistent.nameConsistent
+                ? "All Names are consistent across documents."
+                : "Names are not consistent across all documents."}
             </span>
           </div>
         </CardContent>
