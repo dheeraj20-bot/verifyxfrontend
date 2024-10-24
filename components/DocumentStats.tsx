@@ -38,6 +38,7 @@ interface DocumentStats {
   addressentity: {
     documentType: string;
     address: string;
+    address_complete: boolean;
     name: string;
   }[];
 }
@@ -208,10 +209,8 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
                   </TableCell>
                   <TableCell>{doc.address? doc.address: "Not Found"}  </TableCell>
                   <TableCell>
-                    {stats.isConsistent.addressConsistent ? (
-                     
+                    {doc.address_complete ? (
                         <CheckCircle className="w-6 h-6 text-green-500" />
-                     
                     ) : (
                      
                         <X className="w-6 h-6 text-red-500" />
