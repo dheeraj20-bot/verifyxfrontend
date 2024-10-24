@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertTriangle, CheckCircle, X, Check, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, X, Check } from "lucide-react";
 import {
   PieChart,
   Pie,
@@ -21,7 +21,6 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import { Badge } from "./ui/badge";
 
 interface DocumentStats {
   stats: {
@@ -210,23 +209,13 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
                   <TableCell>{doc.address? doc.address: "Not Found"}  </TableCell>
                   <TableCell>
                     {stats.isConsistent.addressConsistent ? (
-                      <Badge
-                        className="flex bg-green-500
-                    text-white
-                    items-center rounded-2xl gap-1 hover:bg-green-400"
-                      >
-                        <CheckCircle className="w-4 h-4" />
-                        Complete
-                      </Badge>
+                     
+                        <CheckCircle className="w-6 h-6 text-green-500" />
+                     
                     ) : (
-                      <Badge
-                        className="flex bg-red-500
-                    text-white
-                    items-center rounded-2xl gap-1 hover:bg-red-400"
-                      >
-                        <XCircle className="w-4 h-4" />
-                        Incomplete
-                      </Badge>
+                     
+                        <X className="w-6 h-6 text-red-500" />
+                       
                     )}
                   </TableCell>
                 </TableRow>
