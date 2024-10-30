@@ -69,7 +69,7 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
       try {
         setLoading(true);
         const response = await axios.get(
-          `https://verifybackend.onrender.com/api/documents/${uploadId}/stats`
+          `http://fraud-env.eba-7sev2vqn.us-west-1.elasticbeanstalk.com/api/documents/${uploadId}/stats`
         );
         setStats(response.data);
         console.log(response.data);
@@ -182,7 +182,7 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
           <CardTitle className="text-4xl text-primary font-bold">
-          Integrity Check
+            Integrity Check
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -202,26 +202,35 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
                   className={index % 2 === 0 ? "bg-gray-50" : ""}
                 >
                   <TableCell className="font-medium  capitaliz ">
-                    {doc.documentType? doc.documentType===null ? "Not Found": doc.documentType : "Not Found" }
+                    {doc.documentType
+                      ? doc.documentType === null
+                        ? "Not Found"
+                        : doc.documentType
+                      : "Not Found"}
                   </TableCell>
                   <TableCell className="font-medium  ">
-                  { doc.name? doc.name===null || doc.name==="null" || doc.name==="NULL"  ? "Not Found": doc.name : "Not Found" }
+                    {doc.name
+                      ? doc.name === null ||
+                        doc.name === "null" ||
+                        doc.name === "NULL"
+                        ? "Not Found"
+                        : doc.name
+                      : "Not Found"}
                   </TableCell>
-                  <TableCell>{doc.address? doc.address: "Not Found"}  </TableCell>
+                  <TableCell>
+                    {doc.address ? doc.address : "Not Found"}{" "}
+                  </TableCell>
                   <TableCell>
                     {doc.address_complete ? (
-                        <CheckCircle className="w-6 h-6 text-green-500" />
+                      <CheckCircle className="w-6 h-6 text-green-500" />
                     ) : (
-                     
-                        <X className="w-6 h-6 text-red-500" />
-                       
+                      <X className="w-6 h-6 text-red-500" />
                     )}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-
 
           <div
             className={`${
@@ -230,14 +239,12 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
                 : "bg-yellow-50"
             } mt-6 p-4 border rounded-[0.8rem]  flex items-center gap-2`}
           >
-            {
-              stats.isConsistent.addressConsistent ? (
-                <Check className="text-green-700 w-4 h-4" />
-              ) : (
-                <AlertTriangle className="text-yellow-700 w-4 h-4" />
-              )
-            }
-            
+            {stats.isConsistent.addressConsistent ? (
+              <Check className="text-green-700 w-4 h-4" />
+            ) : (
+              <AlertTriangle className="text-yellow-700 w-4 h-4" />
+            )}
+
             <span className="font-medium ">
               {stats.isConsistent.addressConsistent
                 ? "All addresses are consistent across documents."
@@ -246,19 +253,15 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
           </div>
           <div
             className={`${
-              stats.isConsistent.nameConsistent
-                ? "bg-green-50"
-                : "bg-yellow-50"
+              stats.isConsistent.nameConsistent ? "bg-green-50" : "bg-yellow-50"
             } mt-6 p-4 border rounded-[0.8rem]  flex items-center gap-2`}
           >
-            {
-              stats.isConsistent.addressConsistent ? (
-                <Check className="text-green-700 w-4 h-4" />
-              ) : (
-                <AlertTriangle className="text-yellow-700 w-4 h-4" />
-              )
-            }
-            
+            {stats.isConsistent.addressConsistent ? (
+              <Check className="text-green-700 w-4 h-4" />
+            ) : (
+              <AlertTriangle className="text-yellow-700 w-4 h-4" />
+            )}
+
             <span className="font-medium ">
               {stats.isConsistent.nameConsistent
                 ? "All Names are consistent across documents."

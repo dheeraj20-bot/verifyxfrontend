@@ -34,7 +34,7 @@ export default function RiskDashboard() {
     const fetchUploads = async () => {
       try {
         const response = await axios.get(
-          "https://verifybackend.onrender.com/api/documents/dashboard"
+          "http://fraud-env.eba-7sev2vqn.us-west-1.elasticbeanstalk.com/api/documents/dashboard"
         );
         setUploads(response.data); // Set the data from the API
       } catch (error) {
@@ -85,9 +85,7 @@ export default function RiskDashboard() {
         {/* Example of dynamic data rendering */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Packets
-            </CardTitle>
+            <CardTitle className="text-sm font-medium">Total Packets</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{uploads.length}</div>
@@ -171,7 +169,7 @@ export default function RiskDashboard() {
               <TableHead>Assigned to</TableHead>
               <TableHead>Documents</TableHead>
               <TableHead>Status</TableHead>
-            
+
               <TableHead>Created At</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
@@ -182,12 +180,18 @@ export default function RiskDashboard() {
                 <TableCell>UPID{upload.uploadId}</TableCell>
                 <TableCell>{upload.assignedTo}</TableCell>
                 <TableCell>{upload.documentCount}</TableCell>
-                <TableCell  >
-                  <span className={`${upload.overallStatus === "HIGH RISK" ? " bg-red-100 text-red-500" : "text-green-500 bg-green-100"} px-3 py-1 font-semibold rounded-2xl`}>
+                <TableCell>
+                  <span
+                    className={`${
+                      upload.overallStatus === "HIGH RISK"
+                        ? " bg-red-100 text-red-500"
+                        : "text-green-500 bg-green-100"
+                    } px-3 py-1 font-semibold rounded-2xl`}
+                  >
                     {upload.overallStatus}
                   </span>
-                  </TableCell>
-               
+                </TableCell>
+
                 <TableCell>
                   {new Date(upload.createdAt).toLocaleDateString()}
                 </TableCell>

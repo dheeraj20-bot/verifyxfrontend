@@ -55,7 +55,7 @@ export default function DocumentDashboard({ uploadId }: { uploadId: string }) {
     try {
       setLoading(true);
       const response = await axios.get(
-        `https://verifybackend.onrender.com/api/documents/${uploadId}`
+        `http://fraud-env.eba-7sev2vqn.us-west-1.elasticbeanstalk.com/api/documents/${uploadId}`
       );
       setDocuments(response?.data?.documentSubmissions || []);
     } catch (err) {
@@ -70,7 +70,7 @@ export default function DocumentDashboard({ uploadId }: { uploadId: string }) {
     try {
       setDetailsLoading(true);
       const response = await axios.get(
-        `https://verifybackend.onrender.com/api/documents/${documentId}/details`
+        `http://fraud-env.eba-7sev2vqn.us-west-1.elasticbeanstalk.com/api/documents/${documentId}/details`
       );
       setSelectedDoc(response.data);
     } catch (err) {
