@@ -34,7 +34,7 @@ export default function RiskDashboard() {
     const fetchUploads = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/documents/dashboard"
+          "http://18.144.125.218:5000/api/documents/dashboard"
         );
         setUploads(response.data); // Set the data from the API
       } catch (error) {

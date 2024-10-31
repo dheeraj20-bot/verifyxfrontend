@@ -55,7 +55,7 @@ export default function DocumentDashboard({ uploadId }: { uploadId: string }) {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/api/documents/${uploadId}`
+        `http://18.144.125.218:5000/api/documents/${uploadId}`
       );
       setDocuments(response?.data?.documentSubmissions || []);
     } catch (err) {
@@ -70,7 +70,7 @@ export default function DocumentDashboard({ uploadId }: { uploadId: string }) {
     try {
       setDetailsLoading(true);
       const response = await axios.get(
-        `http://localhost:5000/api/documents/${documentId}/details`
+        `http://18.144.125.218:5000/api/documents/${documentId}/details`
       );
       setSelectedDoc(response.data);
     } catch (err) {
