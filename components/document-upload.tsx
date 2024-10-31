@@ -85,7 +85,7 @@ export default function DocumentUpload() {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://fraud-env.eba-7sev2vqn.us-west-1.elasticbeanstalk.com/api/documents/upload",
+        "http://localhost:5000/api/documents/upload",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

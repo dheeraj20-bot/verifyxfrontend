@@ -69,7 +69,7 @@ export default function DocumentStats({ uploadId }: { uploadId: string }) {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://fraud-env.eba-7sev2vqn.us-west-1.elasticbeanstalk.com/api/documents/${uploadId}/stats`
+          `http://localhost:5000/api/documents/${uploadId}/stats`
         );
         setStats(response.data);
         console.log(response.data);

@@ -34,7 +34,7 @@ export default function RiskDashboard() {
     const fetchUploads = async () => {
       try {
         const response = await axios.get(
-          "http://fraud-env.eba-7sev2vqn.us-west-1.elasticbeanstalk.com/api/documents/dashboard"
+          "http://localhost:5000/api/documents/dashboard"
         );
         setUploads(response.data); // Set the data from the API
       } catch (error) {
